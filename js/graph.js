@@ -114,9 +114,18 @@ function dataReady() {
       .attr("y", function(d) {
         return visHeight - (d.slaximp / tastBarHeightDivideVal);  //Height minus data value
       })
-      .attr("fill", red);
+      .attr("fill", yellow);
 
-    svg.on("mousemove", function() {
+    svg.append("text")
+      .attr("x", 10)
+      .attr("y", 35)
+      .attr("fill", yellow)
+      .attr("font-family", "'Fjalla One', sans-serif")
+      .attr("font-size", "36px")
+      .text("Trans-Atlantic Slave Trade");
+
+    svg.on
+    ("mousemove", function() {
       var mouse = d3.mouse(this);
       fisheye.focus(mouse[0]);
       redraw();
@@ -149,6 +158,14 @@ function dataReady() {
       .attr("y", 0)
       .attr("fill", green);
 
+    svg.append("text")
+      .attr("x", 10)
+      .attr("y", visHeight - 20)
+      .attr("fill", green)
+      .attr("font-family", "'Fjalla One', sans-serif")
+      .attr("font-size", "36px")
+      .text("African Collections");
+
     svg.on("mousemove", function() {
       var mouse = d3.mouse(this);
       fisheye.focus(mouse[0]);
@@ -158,7 +175,7 @@ function dataReady() {
     svg.on("mouseout", function() {
       reset();
     });
-}
+  }
 }
 
 function arrayUnique(array) {
