@@ -21,7 +21,7 @@ var tastYears,collYears,years;
 
 var tastBarHeightDivideVal, collBarHeightDivideVal;
 
-var tastBars, collBars, yearText;
+var tastBars, collBars;
 var xSteps;
 
 d3.csv('data/tastdb-min.csv')
@@ -116,27 +116,6 @@ function dataReady() {
       })
       .attr("fill", red);
 
-    yearText = svg.selectAll("yearText")
-      .data(tastData)
-      .enter()
-      .append("text")
-      .attr("transform", function(d) {
-        return "rotate(-90)"
-      })
-      .attr("y", function(d, i) {
-        return i * (visWidth / tastData.length);
-      })
-      .attr("x", function(d) {
-        return visHeight * -1;
-      })
-      .text(function(d) {
-        return d.yearam;
-      })
-      .attr("class", "yeartext")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", "20px")
-      .attr("fill", yellow);
-
     svg.on("mousemove", function() {
       var mouse = d3.mouse(this);
       fisheye.focus(mouse[0]);
@@ -224,28 +203,6 @@ function redraw() {
       var rowNum = Math.floor(i/years.length);
       return (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[i%years.length]))
     });
-
-  yearText
-    .attr("y", function(d, i) {
-      return fisheye(xSteps[i%years.length]) + (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[i%years.length]))/2;})
-    .style("font-size",function(d,i){
-      var rowNum = Math.floor(i/years.length);
-      var xx = (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[i%years.length]));
-      var yy = (fisheye(xSteps[rowNum+1]|| visHeight) - fisheye(xSteps[rowNum]));
-      var minDim = d3.min([yy,xx]);
-      return fontSizeFisheye(minDim);})
-    .style("fill-opacity",function(d,i){
-      var rowNum = Math.floor(i/years.length);
-      var xx = (fontOpacityFisheye(xSteps[(i+1)%years.length] || visWidth) - fontOpacityFisheye(xSteps[(i)%years.length]));
-      //var yy = (yFisheye(ySteps[rowNum+1] || height) - yFisheye(ySteps[rowNum]));
-      var minDim = d3.min(visHeight,xx);
-      return fontOpacityFisheye(minDim);})
-/*    .attr("dy",function(d,i){
-      var rowNum = ((i % years.length) > 0) ? (i % years.length) : 1 ;
-      var yy = (yFisheye(ySteps[rowNum]) -
-      yFisheye(ySteps[rowNum-1]))
-      return (fontSizeFisheye(yy)/2);})*/
-  ;
 }
 
 function reset() {
