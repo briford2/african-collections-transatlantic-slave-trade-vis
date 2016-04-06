@@ -192,16 +192,6 @@ function dataReady() {
       .attr("font-size", "36px")
       .text("African Collections");
 
-    svg.on("mousemove", function() {
-      var mouse = d3.mouse(this);
-      fisheye.focus(mouse[0]);
-      redraw();
-    });
-
-    svg.on("mouseout", function() {
-      reset();
-    });
-
     reset();
   }
 }
