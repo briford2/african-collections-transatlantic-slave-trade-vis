@@ -14,9 +14,9 @@ var green = "#007a4d";
 var yellow = "#ffb612";
 var blue = "#002395";
 
-var fisheye =  d3.fisheye.scale(d3.scale.identity).domain([0,visWidth]).focus(visWidth/2).distortion(3);
-var fontSizeFisheye = d3.fisheye.scale(d3.scale.log).domain([3,150]).range([8,15]).focus(12);
-var fontOpacityFisheye = d3.fisheye.scale(d3.scale.log).domain([8,50]).range([0,1]).focus(1);
+var fisheye =  d3.fisheye.scale(d3.scale.identity).domain([0,visWidth]).focus(visWidth/2).distortion(10);
+var fontSizeFisheye = d3.fisheye.scale(d3.scale.linear).domain([0.000001,15]).range([3,10]).focus(8).distortion(10);
+var fontOpacityFisheye = d3.fisheye.scale(d3.scale.linear).domain([0.000001,15]).range([0,1]).focus(.8).distortion(10);
 var tastYears,collYears,years;
 
 var tastBarHeightDivideVal, collBarHeightDivideVal;
@@ -82,7 +82,7 @@ function dataReady() {
           found = true;
           break;
         }
-    }
+      }
       if (!found) {
         collData.push({year: years[i], count: 0});
       }
@@ -130,11 +130,16 @@ function dataReady() {
         return visHeight * -1;
       })
       .text(function(d) {
-        return d.yearam;
+        if (d.yearam > 0) {
+          return d.yearam +" A.D.";
+        }
+        else {
+          return d.yearam*-1 +" B.C.";
+        }
       })
       .attr("class", "yeartext")
       .attr("font-family", "sans-serif")
-      .attr("font-size", "20px")
+      .attr("font-size", "12px")
       .attr("fill", yellow);
 
     svg.on("mousemove", function() {
@@ -170,16 +175,8 @@ function dataReady() {
       .attr("y", 0)
       .attr("fill", green);
 
-    svg.on("mousemove", function() {
-      var mouse = d3.mouse(this);
-      fisheye.focus(mouse[0]);
-      redraw();
-    });
-
-    svg.on("mouseout", function() {
-      reset();
-    });
-}
+    reset();
+  }
 }
 
 function arrayUnique(array) {
@@ -212,7 +209,6 @@ function redraw() {
       return fisheye(xSteps[i%years.length]);
     })
     .attr("width", function(d,i){
-      var rowNum = Math.floor(i/years.length);
       return (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[i%years.length]))
     });
 
@@ -221,31 +217,21 @@ function redraw() {
       return fisheye(xSteps[i%years.length]);
     })
     .attr("width", function(d,i){
-      var rowNum = Math.floor(i/years.length);
       return (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[i%years.length]))
     });
 
   yearText
     .attr("y", function(d, i) {
-      return fisheye(xSteps[i%years.length]) + (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[i%years.length]))/2;})
-    .style("font-size",function(d,i){
-      var rowNum = Math.floor(i/years.length);
-      var xx = (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[i%years.length]));
-      var yy = (fisheye(xSteps[rowNum+1]|| visHeight) - fisheye(xSteps[rowNum]));
-      var minDim = d3.min([yy,xx]);
-      return fontSizeFisheye(minDim);})
+      return fisheye(xSteps[i%years.length]) + (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[i%years.length]))/2;
+    })
+    .attr("font-size",function(d,i){
+      var xx = (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[(i)%years.length]));
+      return fontSizeFisheye(xx) +"px";
+    })
     .style("fill-opacity",function(d,i){
-      var rowNum = Math.floor(i/years.length);
-      var xx = (fontOpacityFisheye(xSteps[(i+1)%years.length] || visWidth) - fontOpacityFisheye(xSteps[(i)%years.length]));
-      //var yy = (yFisheye(ySteps[rowNum+1] || height) - yFisheye(ySteps[rowNum]));
-      var minDim = d3.min(visHeight,xx);
-      return fontOpacityFisheye(minDim);})
-/*    .attr("dy",function(d,i){
-      var rowNum = ((i % years.length) > 0) ? (i % years.length) : 1 ;
-      var yy = (yFisheye(ySteps[rowNum]) -
-      yFisheye(ySteps[rowNum-1]))
-      return (fontSizeFisheye(yy)/2);})*/
-  ;
+      var xx = (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[(i)%years.length]));
+      return fontOpacityFisheye(xx);
+    });
 }
 
 function reset() {
@@ -260,5 +246,12 @@ function reset() {
     .attr("x", function(d, i) {
       return i * (visWidth / years.length);
     });
+
+  yearText
+    .attr("y", function(d, i) {
+      return i * (visWidth / years.length);
+    })
+    .attr("font-size", "12px")
+    .style("fill-opacity",0);
 }
 
