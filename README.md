@@ -9,12 +9,12 @@ items in museums' African collections? This is a visualization putting
 these two pieces of data together, using publicly available museums
 data from a handful of museums. 
 
-All museum data has been aggregated and anonymized in `[data/collection.csv](blob/master/data/collection.csv)`.
+All museum data has been aggregated and anonymized in [`data/collection.csv`](blob/master/data/collection.csv).
 Trans-Atlantic Slave Trade data provided by [slavevoyages.org](http://www.slavevoyages.org/voyage/download)
 
 ## Getting Started
 
-All the anonymized musuem data is in a single CSV in `[data/collection.csv](blob/master/data/collection.csv)`. It's a two column file in the format:
+All the anonymized musuem data is in a single CSV in [`data/collection.csv`](blob/master/data/collection.csv). It's a two column file in the format:
 
 | Year | Number of object | 
 |------|------------------|
