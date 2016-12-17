@@ -116,7 +116,7 @@ function dataReady() {
       })
       .attr("fill", red);
 
-    yearText = svg.selectAll("yearText")
+/*    yearText = svg.selectAll("yearText")
       .data(tastData)
       .enter()
       .append("text")
@@ -141,7 +141,8 @@ function dataReady() {
       .attr("font-family", "sans-serif")
       .attr("font-size", "12px")
       .attr("fill", yellow);
-
+*/
+    
     svg.append("text")
       .attr("x", 10)
       .attr("y", 35)
@@ -237,7 +238,7 @@ function redraw() {
       return (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[i%years.length]))
     });
 
-  yearText
+/*  yearText
     .attr("y", function(d, i) {
       return fisheye(xSteps[i%years.length]) + (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[i%years.length]))/2;
     })
@@ -249,6 +250,7 @@ function redraw() {
       var xx = (fisheye(xSteps[(i+1)%years.length] || visWidth) - fisheye(xSteps[(i)%years.length]));
       return fontOpacityFisheye(xx);
     });
+*/
 }
 
 function reset() {
@@ -264,11 +266,12 @@ function reset() {
       return i * (visWidth / years.length);
     });
 
-  yearText
+/*  yearText
     .attr("y", function(d, i) {
       return i * (visWidth / years.length);
     })
     .attr("font-size", "12px")
     .style("fill-opacity",0);
+*/
 }
 
